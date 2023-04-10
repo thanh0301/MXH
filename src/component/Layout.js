@@ -1,24 +1,45 @@
 import Header from './Header';
 import { useSelector } from 'react-redux';
-import { Routes, Route} from 'react-router-dom';
-import User from './User/User';
-import Profiles from './User/Profiles';
+import { Routes, Route } from 'react-router-dom';
+import Compole from './User/Compole';
+import Admin from './Admin/Admin';
+import Composeuser from './Admin/Composeuser';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Layout = () => {
 
 
     const Account = useSelector(state => state.accountThanh.Account)
     return (
-<>      
-    <Routes>
-         <Route path='/' element={<Header />}>
-            <Route path={Account.Last_Name} element={<User />} />
-            profiles
-         </Route>
-         <Route path='profiles' element={<Profiles/>}> 
+        <>
+            <Routes>
+                <Route path='/' element={<Header />}>
 
-         </Route>
-</Routes>
-</>
+                </Route>
+             
+                <Route path='/:id' element={<Compole />}/>
+
+                <Route path='admin' element={<Admin />}>
+                    <Route path='alluser' element={<Composeuser />} />
+                </Route>
+
+            </Routes>
+            
+            <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+
+
+        </>
     )
 }
 

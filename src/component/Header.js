@@ -3,77 +3,79 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import './Header.scss'
+
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import ModelDangNhap from './ModelDangNhap';
-import { useState } from 'react';
-import ModelDangKy from './ModalDangKy';
+import ModelDangNhap from './Model/ModelDangNhap';
+import { useEffect, useState } from 'react';
+import ModelDangKy from './Model/ModalDangKy';
 import { useSelector } from 'react-redux';
-import './Header.scss'
+import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { AiFillBell, AiFillMessage, AiOutlineSearch, AiOutlineVideoCamera, AiFillFileImage, AiOutlineSmile } from 'react-icons/ai'
+
+import { useNavigate } from 'react-router-dom';
+import { getstatus } from '../services/apiServices';
+import Getstatus from './Home/Getstatus';
+import Createstatus from './Model/Createstatus';
+
+import { logout } from '../services/apiServices';
+import Headertop from './Headertop';
 const Header = () => {
   const nomal = useSelector(state => state.accountThanh.nomal);
   const Account = useSelector(state => state.accountThanh.Account)
-
+  const dispatch = useDispatch();
   const img1 = 'http://localhost:8080'
-  console.log(Account)
+  const navigate = useNavigate();
   const [showdangnhap, setshowdangnhap] = useState(false);
   const [showdangky, setshowdangky] = useState(false);
+
+  const [showstatus, setshowstatus] = useState(false)
+
+  const [listdangtin, setlistdangtin] = useState([]);
+
+  useEffect(() => {
+    fetchListdangtin();
+  }, [])
+
+  const fetchListdangtin = async () => {
+    let data = await getstatus();
+
+    if (data && data.EC === 0) {
+      // console.log(data)
+      setlistdangtin(data.content)
+    }
+
+  }
+
+  console.log("check account",Account)
 
 
   return (
     <div>
-      <div className='header-top'>
-        <Navbar bg="light" expand="lg">
-          <Container fluid>
-            <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success">Search</Button>
-            </Form>
-            <Navbar.Toggle aria-controls="navbarScroll" />
-            <Navbar.Collapse id="navbarScroll">
-              <Nav
-                className="me-auto my-2 my-lg-0"
-                style={{ maxHeight: '100px' }}
-                navbarScroll
-              >
-              </Nav>
-              {
-                nomal === false ?
-                  <>
-                    <Nav className='btn_signin'>
+      <Headertop />
+      
+      <div className="container home">
+        <div className='home-tile'>
+          <div onClick={() => setshowstatus(true)} className='home-span'>
+            <span  >Bạn dang nghĩ gì ?</span>
+          </div>
+          <hr />
+          <div className='home-icon'>
+            <span className='icon1'> <AiOutlineVideoCamera />Video trực tiếp</span>
+            <span className='icon2'><AiFillFileImage />Ảnh/Video</span>
+            <span className='icon3'> <AiOutlineSmile />Cảm súc/hoạt động</span>
+          </div>
+        </div>
+        <Getstatus listdangtin={listdangtin} />
 
-                      <Button onClick={() => setshowdangnhap(true)} variant="primary">Sign in</Button>
-                      <ModelDangNhap show={showdangnhap} setShow={setshowdangnhap}
-                      />
-                      <Button variant="warning" onClick={() => setshowdangky(true)}>dang ky</Button>
-                      <ModelDangKy show={showdangky} setShow={setshowdangky} />
-                    </Nav>
-                  </> :
-                  <NavDropdown title="settin" >
-                    <NavDropdown.Item eventKey="4.1"> <img src={`${img1}${Account.Avater}`} /> <span> {Account.Last_Name}</span></NavDropdown.Item>
-                    <Link to={Account.Last_Name} className='nav-link'> Trang cá nhân </Link>
-                    <Link to='profiles' className='nav-link'> Cài đặt</Link>
-                    <NavDropdown.Item eventKey="4.2">Another action</NavDropdown.Item>
-                    <NavDropdown.Item eventKey="4.3">Something else here</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item eventKey="4.4">Separated link</NavDropdown.Item>
-
-                  </NavDropdown>
-              }
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+        <Createstatus
+          show={showstatus} setShow={setshowstatus}
+          fetchListdangtin={fetchListdangtin}
+        />
       </div>
       <div>
-                <Outlet/>
+      
       </div>
     </div>
 

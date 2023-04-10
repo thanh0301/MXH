@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import store from './redux/store';
+import {store,persistor} from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 
@@ -14,12 +14,11 @@ root.render(
 
 
       <Provider store={store}>
-            {/* <PersistGate loading={null} persistor={persistor}> */}
+            <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
                   <App />
             </BrowserRouter>
-
-            {/* </PersistGate> */}
+            </PersistGate>
       </Provider>
 
 

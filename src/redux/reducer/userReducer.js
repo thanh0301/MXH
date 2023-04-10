@@ -3,15 +3,14 @@ import { INCREMENT, DECREMENT } from '../action/counterAction'
 const INITIAL_STATE = {
     Account: {
         User_id: '',
-
         Password: '',
         First_Name: '',
         Last_Name: '',
-        Gender: '',
         DoB: '',
         Avater: '',
         Background: '',
         Bpoint: '',
+        Email: ''
 
     },
     nomal: false
@@ -25,23 +24,35 @@ const userReducer = (state = INITIAL_STATE, action) => {
         case 'FETCH_USER_LOGIN_SUCCESS':
             return {
                 ...state, Account: {
-                    User_id: action?.payload?.content?.User_id,
-
-                    Password: action?.payload?.content?.Password,
-                    First_Name: action?.payload?.content?.First_Name,
-                    Last_Name: action?.payload?.content?.Last_Name,
-                    Gender: action?.payload?.content?.Gender,
-                    DoB: action?.payload?.content?.DoB,
-                    Avater: action?.payload?.content?.Avater,
-                    Background: action?.payload?.content?.Background,
-                    Bpoint: action?.payload?.content?.Bpoint,
+                    User_id: action?.payload?.content?.user_id,
+                    Password: action?.payload?.content?.password,
+                    First_Name: action?.payload?.content?.first_name,
+                    Last_Name: action?.payload?.content?.last_name,
+                    DoB: action?.payload?.content?.dob,
+                    Avater: action?.payload?.content?.avatar,
+                    Background: action?.payload?.content?.background,
+                    Bpoint: action?.payload?.content?.bpoint,
+                    Email: action?.payload?.content?.email,
 
                 },
                 nomal: true
             };
-        case DECREMENT:
+        case 'FETCH_USER_LOGOUT_SUCCESS':
             return {
-                ...state, count: state.count - 1,
+                Account: {
+                    User_id: '',
+                    Password: '',
+                    First_Name: '',
+                    Last_Name: '',
+                    DoB: '',
+                    Avater: '',
+                    Background: '',
+                    Bpoint: '',
+                    Email: ''
+            
+                },
+                nomal: false
+            
             };
         default: return state;
     }
